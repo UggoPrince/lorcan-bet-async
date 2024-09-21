@@ -90,6 +90,7 @@ public class OrderService {
         return true;
     }
 
+    // logs order success
     private void logOrderSuccess(Order order) {
         OrderLog log = new OrderLog();
         log.setOrderId(order.getId());
@@ -99,6 +100,7 @@ public class OrderService {
         orderLogRepository.save(log);
     }
 
+    // logs order failure
     private void logOrderFailure(Order order, String errorMessage) {
         OrderLog log = new OrderLog();
         log.setOrderId(order.getId());
@@ -109,6 +111,7 @@ public class OrderService {
     }
 
 
+    // handles order creation
     @Transactional
     public Order createOrder(OrderDto orderDto) {
         Order order = new Order();
@@ -122,6 +125,7 @@ public class OrderService {
         return order;
     }
 
+    // kafka listen that handles orders asynchronously
     @KafkaListener(topics = "order-events")
     public void processOrder(String orderId) {
         Order order = orderRepository.findById(Long.parseLong(orderId))
@@ -160,6 +164,7 @@ public class OrderService {
         });
     }
 
+    // retries payment after failure
     private void retryPayment(Order order, double amount, int attempt) {
         log.info("Retrying payment for order {} (Attempt {})", order.getId(), attempt);
         try {
@@ -170,18 +175,21 @@ public class OrderService {
         initiatePaymentProcess(order, amount, attempt);
     }
 
+    // handles payment failure error
     private void handlePaymentError(Order order, Throwable ex) {
         order.setStatus(Status.FAILED.name());
         orderRepository.save(order);
         logOrderFailure(order, ex.getMessage());
     }
 
+    // handles payment failure
     private void handlePaymentFailure(Order order, String errorMessage) {
         order.setStatus(Status.FAILED.name());
         orderRepository.save(order);
         logOrderFailure(order, errorMessage);
     }
 
+    // handles successful order placement
     private void completeOrder(Order order) {
         inventoryService.deductStock(order.getProductId(), order.getQuantity());
         order.setStatus(Status.PROCESSED.name());

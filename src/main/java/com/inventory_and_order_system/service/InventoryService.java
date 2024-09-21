@@ -27,6 +27,7 @@ public class InventoryService {
         return inventory.isPresent() && inventory.get().getQuantity() >= quantity;
     }
 
+    // gets a stock by product id
     public Optional<Inventory> getStock(Long productId) {
         Optional<Inventory> inventory = inventoryRepository.findByProductId(productId);
         return inventory;

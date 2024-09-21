@@ -9,6 +9,7 @@ To run the service on your computer, clone the repository, and change these valu
 The system runs kafka, so you need to have kafka installed and setup before starting the service. Alternatively, you can use a 
 remote kafka service.
 Also, for the migration, the flyway dependency handles that for you. Only provide your Postgresql database credentials.
+The migration files are found in the **/resources/db/migration** folder.
 
 After that, execute the following maven commands on your cmd:
 

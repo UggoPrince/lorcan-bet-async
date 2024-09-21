@@ -23,6 +23,7 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    // creates a new product
     public Product createProduct(ProductDto productDto) {
         Product product = new Product();
         product.setName(productDto.getName());
@@ -31,6 +32,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    // updates an existing product
     public Product updateProduct(Long productId, UpdateProductDto updatedProductDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -46,6 +48,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    // deletes a product
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
     }
