@@ -1,0 +1,9 @@
+-- Orders Table
+CREATE TABLE orders (
+    id BIGSERIAL PRIMARY KEY,
+    product_id BIGINT NOT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
